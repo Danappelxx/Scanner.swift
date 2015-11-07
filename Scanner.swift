@@ -6,8 +6,6 @@
 //
 //
 
-import Foundation
-
 // MARK: - Delimiter
 public enum WordDelimiter: String {
     case Space = " "
