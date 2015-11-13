@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "372872F51BF697CF0002047F"
+               BuildableName = "ScannerTests.xctest"
+               BlueprintName = "ScannerTests"
+               ReferencedContainer = "container:Scanner.swift.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "37B942031BEDDC9000F1028D"
+            BuildableName = "Scanner.framework"
+            BlueprintName = "Scanner-OSX"
+            ReferencedContainer = "container:Scanner.swift.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
