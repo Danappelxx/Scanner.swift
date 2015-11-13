@@ -1,12 +1,12 @@
 //
-//  Scanner-OSX.h
-//  Scanner-OSX
+//  Scanner.h
+//  Scanner
 //
-//  Created by Dan Appel on 11/6/15.
+//  Created by Dan Appel on 11/13/15.
 //
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for Scanner-OSX.
 FOUNDATION_EXPORT double Scanner_OSXVersionNumber;

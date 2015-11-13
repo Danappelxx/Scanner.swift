@@ -7,19 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		37B942081BEDDC9000F1028D /* Scanner-OSX.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B942071BEDDC9000F1028D /* Scanner-OSX.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37B942151BEDDC9B00F1028D /* Scanner-iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B942141BEDDC9B00F1028D /* Scanner-iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		372872EC1BF690EA0002047F /* Scanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 372872EB1BF690EA0002047F /* Scanner.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		372872ED1BF690EA0002047F /* Scanner.h in Headers */ = {isa = PBXBuildFile; fileRef = 372872EB1BF690EA0002047F /* Scanner.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B9421B1BEDDCD700F1028D /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B9421A1BEDDCD700F1028D /* Scanner.swift */; };
 		37B9421C1BEDDCD700F1028D /* Scanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B9421A1BEDDCD700F1028D /* Scanner.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		372872EB1BF690EA0002047F /* Scanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scanner.h; sourceTree = "<group>"; };
+		372872EE1BF691130002047F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37B942041BEDDC9000F1028D /* Scanner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Scanner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		37B942071BEDDC9000F1028D /* Scanner-OSX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Scanner-OSX.h"; sourceTree = "<group>"; };
-		37B942091BEDDC9000F1028D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37B942121BEDDC9B00F1028D /* Scanner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Scanner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		37B942141BEDDC9B00F1028D /* Scanner-iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Scanner-iOS.h"; sourceTree = "<group>"; };
-		37B942161BEDDC9B00F1028D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37B9421A1BEDDCD700F1028D /* Scanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scanner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -44,9 +42,9 @@
 		37B941F81BEDDC7F00F1028D = {
 			isa = PBXGroup;
 			children = (
+				372872EB1BF690EA0002047F /* Scanner.h */,
 				37B9421A1BEDDCD700F1028D /* Scanner.swift */,
-				37B942061BEDDC9000F1028D /* Scanner-OSX */,
-				37B942131BEDDC9B00F1028D /* Scanner-iOS */,
+				372872EE1BF691130002047F /* Info.plist */,
 				37B942051BEDDC9000F1028D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -60,24 +58,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		37B942061BEDDC9000F1028D /* Scanner-OSX */ = {
-			isa = PBXGroup;
-			children = (
-				37B942071BEDDC9000F1028D /* Scanner-OSX.h */,
-				37B942091BEDDC9000F1028D /* Info.plist */,
-			);
-			path = "Scanner-OSX";
-			sourceTree = "<group>";
-		};
-		37B942131BEDDC9B00F1028D /* Scanner-iOS */ = {
-			isa = PBXGroup;
-			children = (
-				37B942141BEDDC9B00F1028D /* Scanner-iOS.h */,
-				37B942161BEDDC9B00F1028D /* Info.plist */,
-			);
-			path = "Scanner-iOS";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -85,7 +65,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				37B942081BEDDC9000F1028D /* Scanner-OSX.h in Headers */,
+				372872EC1BF690EA0002047F /* Scanner.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,7 +73,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				37B942151BEDDC9B00F1028D /* Scanner-iOS.h in Headers */,
+				372872ED1BF690EA0002047F /* Scanner.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,7 +242,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Scanner-OSX/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -315,7 +295,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Scanner-OSX/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -370,7 +350,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Scanner-iOS/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -422,7 +402,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "Scanner-iOS/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
