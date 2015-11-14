@@ -102,13 +102,14 @@ public struct Scanner {
         try advanceUntil { $0.atEndOfWord }
     }
 
-    public mutating func jumpToStartOfPreviousWord() throws {
+    public mutating func jumpToEndOfPreviousWord() throws {
         try jumpToStartOfWord()
 
         if atStartOfString {
             throw ScannerError.WordDoesNotExist
         }
 
+        try precedeUntil { $0.atDelimiter }
         try precedeUntil { !$0.atDelimiter }
     }
 
@@ -119,6 +120,7 @@ public struct Scanner {
             throw ScannerError.WordDoesNotExist
         }
 
+        try advanceUntil { $0.atDelimiter }
         try advanceUntil { !$0.atDelimiter }
     }
 
@@ -176,7 +178,7 @@ public struct Scanner {
 
         var scanner = Scanner(string: string, atLocation: location)
 
-        try scanner.jumpToStartOfPreviousWord()
+        try scanner.jumpToEndOfPreviousWord()
 
         return try scanner.currentWord()
     }
