@@ -25,6 +25,7 @@ public struct ScannerError: ErrorType, CustomStringConvertible {
     public let description: String
 
     public static let WordDoesNotExist = ScannerError(code: 10, description: "The requested word does not exist.")
+    public static let PastBounds = ScannerError(code: 20, description: "Attempting to move outside of the bounds.")
 }
 
 // MARK: - Scanner
@@ -40,19 +41,46 @@ public struct Scanner {
 
     // MARK: - Basic Movement
     public mutating func advance() {
-        self.location++
+        advanceBy(1)
+    }
+
+    public mutating func advanceBy(x: Int) {
+        var i = x
+        while i-- > 0 {
+            advance()
+        }
     }
 
     public mutating func precede() {
-        self.location--
+        precedeBy(1)
     }
+
+    public mutating func precedeBy(x: Int) {
+        var i = x
+        while i-- > 0 {
+            precede()
+        }
+    }
+
+    public mutating func advanceUntil(stopper: Scanner -> Bool) {
+        while !stopper(self) {
+            advance()
+        }
+    }
+
+    public mutating func precedeUntil(stopper: Scanner -> Bool) {
+        while !stopper(self) {
+            precede()
+        }
+    }
+
 
     // MARK: - Jumps
     public mutating func jumpToStartOfString() {
         location = 0
     }
     public mutating func jumpToEndOfString() {
-        location = string.characters.count
+        location = string.characters.count - 1
     }
     public mutating func jumpToStartOfWord() {
         while !atStartOfString && !atDelimiter {
@@ -65,7 +93,7 @@ public struct Scanner {
     }
 
     public mutating func jumpToEndOfWord() {
-        while !atEndOfString && atDelimiter {
+        while !atEndOfString && !atDelimiter {
             advance()
         }
 
@@ -89,7 +117,10 @@ public struct Scanner {
         if atEndOfString {
             throw ScannerError.WordDoesNotExist
         }
-        advance()
+        
+        while !atDelimiter {
+            advance()
+        }
     }
 
     // MARK: - Information
@@ -116,7 +147,7 @@ public struct Scanner {
 
         return word
     }
-
+    
     public func nextWord() -> String? {
 
         var scanner = Scanner(string: string, atLocation: location)
@@ -143,6 +174,51 @@ public struct Scanner {
         return scanner.currentWord
     }
 
+    public func relativeRange(from from: Int, to: Int) throws -> String {
+
+        if location - from < 0 {
+            throw ScannerError.PastBounds
+        }
+
+        var scanner = Scanner(string: string, atLocation: location - from)
+
+        if from + to > scanner.charactersLeft {
+            throw ScannerError.PastBounds
+        }
+
+        var chars = ""
+        var i = from + to
+        while i-- > 0 {
+            scanner.advance()
+            chars += scanner.currentCharacter
+        }
+
+        return chars
+    }
+
+    public func nextXCharacters(x: Int) -> String {
+
+        var scanner = Scanner(string: string, atLocation: location)
+
+        var i = x
+        var chars = ""
+        while i-- > 0 {
+
+            if scanner.atEndOfString {
+                break
+            }
+
+            scanner.advance()
+            chars += scanner.currentCharacter
+        }
+
+        return chars
+    }
+
+
+    public var charactersLeft: Int {
+        return (string.characters.count - 1) - location
+    }
 
     // MARK: - Location
     public var atDelimiter: Bool {
@@ -154,7 +230,7 @@ public struct Scanner {
     }
 
     public var atEndOfString: Bool {
-        return location == string.characters.count
+        return location+1 == string.characters.count
     }
 
     public var atStartOfWord: Bool {
