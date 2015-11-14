@@ -19,6 +19,12 @@ public enum WordDelimiter: String {
     case ExclamationMark = "!"
 }
 
+extension String {
+    var isDelimiter: Bool {
+        return WordDelimiter(rawValue: self) != nil
+    }
+}
+
 // MARK: - Error
 public struct ScannerError: ErrorType, CustomStringConvertible {
     public let code: Int
@@ -40,37 +46,43 @@ public struct Scanner {
     }
 
     // MARK: - Basic Movement
-    public mutating func advance() {
-        advanceBy(1)
+    public mutating func advance() throws {
+        try advanceBy(1)
     }
 
-    public mutating func advanceBy(x: Int) {
+    public mutating func advanceBy(x: Int) throws {
         var i = x
         while i-- > 0 {
-            advance()
+            if location == string.characters.count-1 {
+                throw ScannerError.PastBounds
+            }
+            location++
         }
     }
 
-    public mutating func precede() {
-        precedeBy(1)
+    public mutating func precede() throws {
+        try precedeBy(1)
     }
 
-    public mutating func precedeBy(x: Int) {
+    public mutating func precedeBy(x: Int) throws {
         var i = x
         while i-- > 0 {
-            precede()
+            if location == 0 {
+                throw ScannerError.PastBounds
+            }
+            location--
         }
     }
 
-    public mutating func advanceUntil(stopper: Scanner -> Bool) {
+    public mutating func advanceUntil(stopper: Scanner -> Bool) throws {
         while !stopper(self) {
-            advance()
+            try advance()
         }
     }
 
-    public mutating func precedeUntil(stopper: Scanner -> Bool) {
+    public mutating func precedeUntil(stopper: Scanner -> Bool) throws {
         while !stopper(self) {
-            precede()
+            try precede()
         }
     }
 
@@ -82,53 +94,56 @@ public struct Scanner {
     public mutating func jumpToEndOfString() {
         location = string.characters.count - 1
     }
-    public mutating func jumpToStartOfWord() {
-        while !atStartOfString && !atDelimiter {
-            precede()
-        }
-
-        if atDelimiter {
-            advance()
-        }
+    public mutating func jumpToStartOfWord() throws {
+        try precedeUntil { $0.atStartOfWord }
     }
 
-    public mutating func jumpToEndOfWord() {
-        while !atEndOfString && !atDelimiter {
-            advance()
-        }
-
-        if atDelimiter {
-            precede()
-        }
+    public mutating func jumpToEndOfWord() throws {
+        try advanceUntil { $0.atEndOfWord }
     }
 
     public mutating func jumpToStartOfPreviousWord() throws {
-        jumpToStartOfWord()
+        try jumpToStartOfWord()
 
         if atStartOfString {
             throw ScannerError.WordDoesNotExist
         }
-        precede()
+
+        try precedeUntil { !$0.atDelimiter }
     }
 
     public mutating func jumpToStartOfNextWord() throws {
-        jumpToEndOfWord()
+        try jumpToEndOfWord()
 
         if atEndOfString {
             throw ScannerError.WordDoesNotExist
         }
-        
-        while !atDelimiter {
-            advance()
-        }
+
+        try advanceUntil { !$0.atDelimiter }
     }
 
     // MARK: - Information
     public var currentCharacter: String {
         return String(string[string.startIndex.advancedBy(location)])
     }
+    
+    public var previousCharacter: String? {
+        if atStartOfString {
+            return nil
+        } else {
+            return String(string[string.startIndex.advancedBy(location - 1)])
+        }
+    }
 
-    public var currentWord: String {
+    public var nextCharacter: String? {
+        if atEndOfString {
+            return nil
+        } else {
+            return String(string[string.startIndex.advancedBy(location + 1)])
+        }
+    }
+    
+    public func currentWord() throws -> String {
 
         if atDelimiter {
             return currentCharacter // if is delimiter, word is delimiter
@@ -136,42 +151,34 @@ public struct Scanner {
 
         var scanner = Scanner(string: string, atLocation: location)
 
-        scanner.jumpToStartOfWord()
+        try scanner.jumpToStartOfWord()
 
         var word = ""
         // add character by character until hit delimiter
         while !scanner.atEndOfString && !scanner.atDelimiter {
             word += scanner.currentCharacter
-            scanner.advance()
+            try scanner.advance()
         }
 
         return word
     }
     
-    public func nextWord() -> String? {
+    public func nextWord() throws -> String {
 
         var scanner = Scanner(string: string, atLocation: location)
 
-        do {
-            try scanner.jumpToStartOfNextWord()
-        } catch {
-            return nil
-        }
+        try scanner.jumpToStartOfNextWord()
 
-        return scanner.currentWord
+        return try scanner.currentWord()
     }
 
-    public func previousWord() -> String? {
+    public func previousWord() throws -> String {
 
         var scanner = Scanner(string: string, atLocation: location)
 
-        do {
-            try scanner.jumpToStartOfPreviousWord()
-        } catch {
-            return nil
-        }
+        try scanner.jumpToStartOfPreviousWord()
 
-        return scanner.currentWord
+        return try scanner.currentWord()
     }
 
     public func relativeRange(from from: Int, to: Int) throws -> String {
@@ -189,14 +196,14 @@ public struct Scanner {
         var chars = ""
         var i = from + to
         while i-- > 0 {
-            scanner.advance()
+            try scanner.advance()
             chars += scanner.currentCharacter
         }
 
         return chars
     }
 
-    public func nextXCharacters(x: Int) -> String {
+    public func nextXCharacters(x: Int) throws -> String {
 
         var scanner = Scanner(string: string, atLocation: location)
 
@@ -208,7 +215,7 @@ public struct Scanner {
                 break
             }
 
-            scanner.advance()
+            try scanner.advance()
             chars += scanner.currentCharacter
         }
 
@@ -222,7 +229,7 @@ public struct Scanner {
 
     // MARK: - Location
     public var atDelimiter: Bool {
-        return WordDelimiter(rawValue: currentCharacter) != nil
+        return currentCharacter.isDelimiter
     }
 
     public var atStartOfString: Bool {
@@ -234,18 +241,34 @@ public struct Scanner {
     }
 
     public var atStartOfWord: Bool {
-        var scanner = Scanner(string: string, atLocation: location)
 
-        scanner.jumpToStartOfWord()
+        guard !atEndOfString else { return false }
+        guard !atDelimiter else { return false}
+        guard let nextCharacter = nextCharacter else { return false }
+        guard !nextCharacter.isDelimiter else { return false }
 
-        return location == scanner.location
+        if let previousIsDelimiter = previousCharacter?.isDelimiter {
+            if !previousIsDelimiter {
+                return false
+            }
+        }
+
+        return true
     }
 
     public var atEndOfWord: Bool {
-        var scanner = Scanner(string: string, atLocation: location)
 
-        scanner.jumpToEndOfWord()
+        guard !atStartOfString else { return false }
+        guard !atDelimiter else { return false }
+        guard let previousCharacter = previousCharacter else { return false }
+        guard !previousCharacter.isDelimiter else { return false }
 
-        return location == scanner.location
+        if let nextIsDelimiter = nextCharacter?.isDelimiter {
+            if !nextIsDelimiter {
+                return false
+            }
+        }
+
+        return true
     }
 }
