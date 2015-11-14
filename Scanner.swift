@@ -99,7 +99,9 @@ public struct Scanner {
     }
 
     public mutating func jumpToEndOfWord() throws {
-        try advanceUntil { $0.atEndOfWord }
+        if try currentWord().characters.count > 1 { // words of length 1 are already at the end
+            try advanceUntil { $0.atEndOfWord }
+        }
     }
 
     public mutating func jumpToEndOfPreviousWord() throws {
@@ -149,6 +151,12 @@ public struct Scanner {
 
         if atDelimiter {
             return currentCharacter // if is delimiter, word is delimiter
+        }
+        
+        if let nextCharacter = nextCharacter, previousCharacter = previousCharacter {
+            if nextCharacter.isDelimiter && previousCharacter.isDelimiter {
+                return currentCharacter
+            }
         }
 
         var scanner = Scanner(string: string, atLocation: location)
