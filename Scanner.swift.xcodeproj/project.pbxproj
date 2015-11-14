@@ -108,8 +108,8 @@
 			isa = PBXGroup;
 			children = (
 				372872F11BF694590002047F /* Scanner.playground */,
-				372872EB1BF690EA0002047F /* Scanner.h */,
 				37B9421A1BEDDCD700F1028D /* Scanner.swift */,
+				372872EB1BF690EA0002047F /* Scanner.h */,
 				372872EE1BF691130002047F /* Info.plist */,
 				372872F71BF697CF0002047F /* ScannerTests */,
 				37B942051BEDDC9000F1028D /* Products */,
@@ -641,6 +641,7 @@
 				372873001BF697CF0002047F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		37B941FC1BEDDC7F00F1028D /* Build configuration list for PBXProject "Scanner.swift" */ = {
 			isa = XCConfigurationList;

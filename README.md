@@ -28,12 +28,9 @@ var scanner = Scanner(string: string)
 ## Step 3: ??
 
 ```swift
-for _ in 1...string.characters.count {
-    if !scanner.atDelimiter && scanner.atStartOfWord {
-        print(scanner.currentWord)
-    }
-
-    scanner.advance()
+while !scanner.atEndOfString {
+    print(try scanner.currentWord())
+    try scanner.jumpToStartOfNextWord()
 }
 ```
 
